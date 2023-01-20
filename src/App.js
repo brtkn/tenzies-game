@@ -3,11 +3,28 @@ import styles from "../src/styles.css";
 import Die from "./Die";
 import { nanoid } from "nanoid";
 import Confetti from "react-confetti";
+import Score from "./Score";
+import Timer from "./Timer";
 
 function App() {
   const [dieState, setDieState] = useState(allNewDice());
 
   const [tenzies, setTenzies] = useState(false);
+
+  const [rollCount, setRollCount] = useState(0);
+
+  const [timer, setTimer] = useState(0);
+
+  const [timeStarter, setTimeStarter] = useState(false);
+
+  useEffect(() => {
+    if (!tenzies && timeStarter) {
+      setTimeout(() => setTimer((timer) => timer + 1), 1000);
+    } else {
+      setTimer(timer);
+      setTimeStarter(false);
+    }
+  }, [tenzies, timer, timeStarter]);
 
   useEffect(() => {
     const allHeld = dieState.every((die) => die.isHeld);
@@ -15,7 +32,6 @@ function App() {
     const allSameValue = dieState.every((die) => die.value === firstValue);
     if (allHeld && allSameValue) {
       setTenzies(true);
-      console.log("You won!!");
     }
   }, [dieState]);
 
@@ -51,9 +67,17 @@ function App() {
       setTenzies(false);
       setDieState(allNewDice());
     }
+
+    if (tenzies) {
+      setRollCount(0);
+      setTimer(0);
+    } else {
+      setRollCount((rollCount) => rollCount + 1);
+    }
   }
 
   function holdDice(id) {
+    setTimeStarter(true);
     setDieState((oldDice) =>
       oldDice.map((die) => {
         return die.id === id ? { ...die, isHeld: !die.isHeld } : die;
@@ -75,6 +99,11 @@ function App() {
         Roll until all dice are the same. Click each die to freeze it at its
         current value between rolls.
       </p>
+      <p className="instructions light-bold">
+        {" "}
+        The game starts when you pick the first dice.
+      </p>
+      <h2>Number of Rolls: {rollCount}</h2>
       <div className="dice-container">
         {dieState.map((die) => {
           return (
@@ -88,12 +117,11 @@ function App() {
         })}
       </div>
 
-      <button
-        className="roll-dice"
-        onClick={/* tenzies ? newGame : */ rollDice}
-      >
+      <button className="roll-dice" onClick={rollDice}>
         {tenzies ? "New Game" : "Roll"}
       </button>
+      <Timer timer={timer} />
+      <div>{tenzies && <Score rollCount={rollCount} gameTime={timer} />}</div>
     </main>
   );
 }
