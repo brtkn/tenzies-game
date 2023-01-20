@@ -1,6 +1,13 @@
-# Getting Started with Tenzies Game
+# React Game Project: Tenzies Game
 
-**Roll until all dice are the same. Click each die to freeze it at its
-current value between rolls.**
+## Live Demo [Tenzies Game](https://statuesque-dasik-277d6b.netlify.app/)
 
 ![This is a tenzies game image](/assets/tenziesGame.png)
+
+### About this project
+
+#### This is the final React project of the Scrimba React course from Bob Ziroll. I added some extra credits like roll counts and game timer to the project.
+
+#### It was a nıce project to strengthen my React hooks knowledge. Like useState() and useEffect().
+
+#### And I used conditional rendering and array methods to render components in necessary places.
