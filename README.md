@@ -2,7 +2,7 @@
 
 ## Live Demo [Tenzies Game](https://statuesque-dasik-277d6b.netlify.app/)
 
-![This is a tenzies game image](/assets/tenziesGame.png)
+![This is a tenzies game image](/assets/tenziesGame.png){:target="\_blank" rel="noopener"}
 
 ### About this project
 
