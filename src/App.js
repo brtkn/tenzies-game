@@ -15,16 +15,27 @@ function App() {
 
   const [timer, setTimer] = useState(0);
 
-  const [timeStarter, setTimeStarter] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (!tenzies && timeStarter) {
       setTimeout(() => setTimer((timer) => timer + 1), 1000);
     } else {
       setTimer(timer);
       setTimeStarter(false);
     }
-  }, [tenzies, timer, timeStarter]);
+  }, [tenzies, timer, timeStarter]); */
+
+  useEffect(() => {
+    let timerId;
+    if (!tenzies && gameStarted && timer >= 0) {
+      timerId = setTimeout(() => setTimer((timer) => timer + 1), 1000);
+    }
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [tenzies, timer, gameStarted]);
 
   useEffect(() => {
     const allHeld = dieState.every((die) => die.isHeld);
@@ -77,7 +88,10 @@ function App() {
   }
 
   function holdDice(id) {
-    setTimeStarter(true);
+    if (!gameStarted) {
+      setGameStarted(true);
+    }
+
     setDieState((oldDice) =>
       oldDice.map((die) => {
         return die.id === id ? { ...die, isHeld: !die.isHeld } : die;
@@ -100,7 +114,6 @@ function App() {
         current value between rolls.
       </p>
       <p className="instructions light-bold">
-        {" "}
         The game starts when you pick the first dice.
       </p>
       <h2>Number of Rolls: {rollCount}</h2>
